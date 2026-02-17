@@ -1,6 +1,7 @@
 package com.bapinaev.domain.model
 
-data class UserInfo(
+data class User(
+    val id: Int,
     val firstName: String,
     val surname: String,
     val age: Long,

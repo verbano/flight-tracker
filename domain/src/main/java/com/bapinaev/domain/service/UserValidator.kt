@@ -1,11 +1,11 @@
 package com.bapinaev.domain.service
 
 import com.bapinaev.domain.error.InvalidUserInfoException
-import com.bapinaev.domain.model.UserInfo
+import com.bapinaev.domain.model.User
 
 class UserValidator {
 
-    fun execute(user: UserInfo) {
+    fun execute(user: User) {
         if (user.login.isEmpty())
             throw InvalidUserInfoException("User login must not be blank")
         if (user.firstName.isBlank())

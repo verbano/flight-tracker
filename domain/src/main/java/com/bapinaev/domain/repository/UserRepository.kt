@@ -1,12 +1,12 @@
 package com.bapinaev.domain.repository
 
-import com.bapinaev.domain.model.UserInfo
+import com.bapinaev.domain.model.User
 
 interface UserRepository {
 
-    fun save(user: UserInfo)
+    fun save(user: User)
 
-    fun getUserInfo(login: String): UserInfo
+    fun getUserInfo(login: String): User
 
     fun removeUserInfo(login: String)
 }
