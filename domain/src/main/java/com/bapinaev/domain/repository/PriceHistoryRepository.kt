@@ -4,7 +4,7 @@ import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.PricePoint
 
 interface PriceHistoryRepository {
-    fun save(query: FlightQuery, point: PricePoint)
+    fun save(userId: Long, query: FlightQuery, point: PricePoint)
 
-    fun getHistory(query: FlightQuery): List<PricePoint>
+    fun getHistory(userId: Long, query: FlightQuery): List<PricePoint>
 }

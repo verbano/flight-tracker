@@ -5,6 +5,7 @@ import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.Money
 import com.bapinaev.domain.model.PriceQuote
 import com.bapinaev.domain.repository.CheapestPriceProvider
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
 
@@ -21,7 +22,7 @@ class FakeCheapestPriceRepository : CheapestPriceProvider {
                 originAirport = "LED",
                 destinationAirport = "VKO",
                 departureAt = query.departureDate.atStartOfDay().toInstant(ZoneOffset.UTC),
-                durationMinutes = 90
+                durationMinutes = Duration.ofMinutes(90)
             ),
             link = "https://example.com"
         )

@@ -1,7 +1,7 @@
 package com.bapinaev.domain.model
 
 data class Money(
-    val amount: Int,
+    val amount: Long,
     val currency: Currency
 ) {
     init {

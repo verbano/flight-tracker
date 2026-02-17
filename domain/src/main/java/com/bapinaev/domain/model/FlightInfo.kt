@@ -1,5 +1,6 @@
 package com.bapinaev.domain.model
 
+import java.time.Duration
 import java.time.Instant
 
 data class FlightInfo(
@@ -8,5 +9,5 @@ data class FlightInfo(
     val originAirport: String,
     val destinationAirport: String,
     val departureAt: Instant,
-    val durationMinutes: Int
+    val duration: Duration
 )
