@@ -1,7 +1,7 @@
 package com.bapinaev.data.repository
 
 import com.bapinaev.domain.model.User
-import com.bapinaev.domain.repository.SessionManager
+import com.bapinaev.domain.service.SessionManager
 
 class InMemorySessionManager : SessionManager {
     private var currentUser: User? = null

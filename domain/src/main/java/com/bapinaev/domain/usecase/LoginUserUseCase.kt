@@ -2,7 +2,7 @@ package com.bapinaev.domain.usecase
 
 import com.bapinaev.domain.error.InvalidCredentialsException
 import com.bapinaev.domain.model.User
-import com.bapinaev.domain.repository.SessionManager
+import com.bapinaev.domain.service.SessionManager
 import com.bapinaev.domain.repository.UserRepository
 
 class LoginUserUseCase(

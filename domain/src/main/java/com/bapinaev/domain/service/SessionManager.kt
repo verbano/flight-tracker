@@ -1,4 +1,4 @@
-package com.bapinaev.domain.repository
+package com.bapinaev.domain.service
 
 import com.bapinaev.domain.model.User
 
@@ -7,4 +7,3 @@ interface SessionManager {
     fun getCurrentUser(): User?
     fun isUserLoggedIn(): Boolean
 }
-

@@ -1,6 +1,6 @@
 package com.bapinaev.domain.usecase
 
-import com.bapinaev.domain.repository.SessionManager
+import com.bapinaev.domain.service.SessionManager
 
 class LogoutUserUseCase(
     private val sessionManager: SessionManager

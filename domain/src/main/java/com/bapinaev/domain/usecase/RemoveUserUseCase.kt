@@ -1,7 +1,7 @@
 package com.bapinaev.domain.usecase
 
 import com.bapinaev.domain.error.UserNotLoggedInException
-import com.bapinaev.domain.repository.SessionManager
+import com.bapinaev.domain.service.SessionManager
 import com.bapinaev.domain.repository.UserRepository
 
 class RemoveUserUseCase (

@@ -8,7 +8,7 @@ import com.bapinaev.domain.model.PricePoint
 import com.bapinaev.domain.repository.CheapestPriceProvider
 import com.bapinaev.domain.repository.PriceHistoryRepository
 import com.bapinaev.domain.repository.QueryHistoryRepository
-import com.bapinaev.domain.repository.SessionManager
+import com.bapinaev.domain.service.SessionManager
 import com.bapinaev.domain.service.FlightQueryValidator
 
 class GetCheapestPriceUseCase(

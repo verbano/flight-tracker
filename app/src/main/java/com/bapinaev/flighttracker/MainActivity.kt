@@ -1,16 +1,15 @@
 package com.bapinaev.flighttracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import com.bapinaev.flighttracker.screens.FavoritesActivity
 import com.bapinaev.flighttracker.ui.theme.FlightTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +18,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FlightTrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                OpenFavoritesScreenButton()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun OpenFavoritesScreenButton() {
+    val context = LocalContext.current
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FlightTrackerTheme {
-        Greeting("Android")
+    Button(onClick = {
+        val intent = Intent(context, FavoritesActivity::class.java)
+        context.startActivity(intent)
+    }) {
+        Text(text = "Открыть избранное")
     }
 }
