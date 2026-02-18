@@ -11,7 +11,7 @@ class LoginUserUseCase(
 ) {
     fun execute(login: String, password: String): User {
         val user = try {
-            userRepository.getUserInfo(login)
+            userRepository.getUser(login)
         } catch (e: Exception) {
             throw InvalidCredentialsException("User with login '$login' not found")
         }

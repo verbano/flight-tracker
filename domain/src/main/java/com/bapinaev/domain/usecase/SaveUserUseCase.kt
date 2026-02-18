@@ -7,7 +7,7 @@ import com.bapinaev.domain.service.UserValidator
 class SaveUserUseCase (
     private val userRepository: UserRepository,
     private val validator: UserValidator
-){
+) {
     fun execute(user: User) {
         validator.execute(user)
 

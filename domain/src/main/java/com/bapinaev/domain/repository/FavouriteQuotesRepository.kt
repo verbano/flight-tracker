@@ -1,12 +1,11 @@
 package com.bapinaev.domain.repository
 
-import com.bapinaev.domain.model.FavoriteQuote
-import com.bapinaev.domain.model.PriceQuote
+import com.bapinaev.domain.model.FavouriteQuote
 
 interface FavouriteQuotesRepository {
-    fun add(userId: Long, quote: PriceQuote)
+    fun add(userLogin: String, quote: FavouriteQuote)
 
-    fun getAll(userId: Long) : List<FavoriteQuote>
+    fun getAll(userLogin: String) : List<FavouriteQuote>
 
-    fun remove(quote: FavoriteQuote)
+    fun remove(userLogin: String, quote: FavouriteQuote)
 }
