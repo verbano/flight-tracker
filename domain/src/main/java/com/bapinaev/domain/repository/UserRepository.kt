@@ -6,7 +6,7 @@ interface UserRepository {
 
     fun save(user: User)
 
-    fun getUser(login: String): User
+    fun getUser(userLogin: String): User
 
-    fun removeUser(userId: Long)
+    fun removeUser(userLogin: String)
 }
