@@ -22,7 +22,7 @@ class FakeCheapestPriceRepository : CheapestPriceProvider {
                 originAirport = "LED",
                 destinationAirport = "VKO",
                 departureAt = query.departureDate.atStartOfDay().toInstant(ZoneOffset.UTC),
-                durationMinutes = Duration.ofMinutes(90)
+                duration = Duration.ofMinutes(90)
             ),
             link = "https://example.com"
         )
