@@ -1,47 +1,49 @@
 package com.bapinaev.flighttracker
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.bapinaev.flighttracker.ui.theme.FlightTrackerTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.commit
+import com.bapinaev.flighttracker.ui.favorites.FavoritesFragment
+import com.bapinaev.flighttracker.ui.profile.ProfileFragment
+import com.bapinaev.flighttracker.ui.search.SearchFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            FlightTrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        val isNight =
+            (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                    android.content.res.Configuration.UI_MODE_NIGHT_YES
+        controller.isAppearanceLightStatusBars = !isNight
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+
+        if (savedInstanceState == null) {
+            bottomNav.selectedItemId = R.id.nav_search
+            openRootFragment(SearchFragment())
+        }
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_search -> { openRootFragment(SearchFragment()); true }
+                R.id.nav_favorites -> { openRootFragment(FavoritesFragment()); true }
+                R.id.nav_profile -> { openRootFragment(ProfileFragment()); true }
+                else -> false
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FlightTrackerTheme {
-        Greeting("Android")
+    private fun openRootFragment(fragment: androidx.fragment.app.Fragment) {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragment_container, fragment)
+        }
     }
 }

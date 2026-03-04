@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FlightTracker</string>
+
+    <string name="nav_search">Поиск</string>
+    <string name="nav_favorites">Избранные</string>
+    <string name="nav_profile">Профиль</string>
 </resources>
