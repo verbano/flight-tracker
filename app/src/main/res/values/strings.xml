@@ -15,4 +15,6 @@
     <string name="search_type_direct">прямой</string>
     <string name="search_type_with_stops">с пересадками</string>
     <string name="search_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nТип: %4$s</string>
+
+    <string name="profile_stub_title">Экран профиля (заглушка)</string>
 </resources>

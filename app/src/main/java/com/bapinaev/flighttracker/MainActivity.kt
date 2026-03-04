@@ -1,12 +1,13 @@
 package com.bapinaev.flighttracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.commit
 import com.bapinaev.flighttracker.ui.favorites.FavoritesFragment
-import com.bapinaev.flighttracker.ui.profile.ProfileFragment
+import com.bapinaev.flighttracker.ui.profile.ProfileActivity
 import com.bapinaev.flighttracker.ui.search.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -34,7 +35,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             when (item.itemId) {
                 R.id.nav_search -> { openRootFragment(SearchFragment()); true }
                 R.id.nav_favorites -> { openRootFragment(FavoritesFragment()); true }
-                R.id.nav_profile -> { openRootFragment(ProfileFragment()); true }
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    false
+                }
                 else -> false
             }
         }
