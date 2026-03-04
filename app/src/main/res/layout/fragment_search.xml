@@ -37,7 +37,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Поиск авиабилетов"
+                    android:text="@string/search_title"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="?attr/colorOnSurface"
@@ -53,7 +53,7 @@
                         android:id="@+id/et_origin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Город вылета (MOW)"/>
+                        android:hint="@string/search_origin_hint"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -66,7 +66,7 @@
                         android:id="@+id/et_destination"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Город прилёта (LED)"/>
+                        android:hint="@string/search_destination_hint"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -79,14 +79,14 @@
                         android:id="@+id/et_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Дата (YYYY-MM-DD)"/>
+                        android:hint="@string/search_date_hint"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/checkbox_direct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Только прямые"
+                    android:text="@string/search_direct_only"
                     android:textSize="16sp"
                     android:layout_marginBottom="20dp" />
 
@@ -94,7 +94,7 @@
                     android:id="@+id/btn_find"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="Найти"
+                    android:text="@string/search_find"
                     android:textAllCaps="false"
                     android:textColor="?attr/colorOnPrimary"
                     android:textStyle="bold"
@@ -108,7 +108,7 @@
             android:id="@+id/tv_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Здесь появится результат"
+            android:text="@string/search_result_placeholder"
             android:textSize="16sp"
             android:padding="12dp"
             android:background="?attr/colorSurface"

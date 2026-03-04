@@ -4,4 +4,15 @@
     <string name="nav_search">Поиск</string>
     <string name="nav_favorites">Избранные</string>
     <string name="nav_profile">Профиль</string>
+
+    <string name="search_title">Поиск авиабилетов</string>
+    <string name="search_origin_hint">Город вылета (MOW)</string>
+    <string name="search_destination_hint">Город прилёта (LED)</string>
+    <string name="search_date_hint">Дата (YYYY-MM-DD)</string>
+    <string name="search_direct_only">Только прямые</string>
+    <string name="search_find">Найти</string>
+    <string name="search_result_placeholder">Здесь появится результат</string>
+    <string name="search_type_direct">прямой</string>
+    <string name="search_type_with_stops">с пересадками</string>
+    <string name="search_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nТип: %4$s</string>
 </resources>
