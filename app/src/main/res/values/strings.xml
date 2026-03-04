@@ -15,6 +15,10 @@
     <string name="search_type_direct">прямой</string>
     <string name="search_type_with_stops">с пересадками</string>
     <string name="search_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nТип: %4$s</string>
+    <string name="search_invalid_date_format">Неверный формат даты. Используй YYYY-MM-DD</string>
+    <string name="search_history_title">История запросов</string>
+    <string name="search_history_clear">Очистить</string>
+    <string name="search_history_item_template">%1$s → %2$s, %3$s, %4$s</string>
 
     <string name="profile_stub_title">Экран профиля (заглушка)</string>
 </resources>
