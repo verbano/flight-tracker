@@ -11,6 +11,7 @@
     <string name="search_date_hint">Дата (YYYY-MM-DD)</string>
     <string name="search_direct_only">Только прямые</string>
     <string name="search_find">Найти</string>
+    <string name="search_result_title">Найденный билет</string>
     <string name="search_result_placeholder">Здесь появится результат</string>
     <string name="search_type_direct">прямой</string>
     <string name="search_type_with_stops">с пересадками</string>
