@@ -19,13 +19,13 @@ class GetCheapestPriceUseCase(
     private val sessionManager: SessionManager
 ) {
 
-    fun execute(query: FlightQuery): PriceCheckResult {
+    suspend fun execute(query: FlightQuery): PriceCheckResult {
         validator.execute(query)
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         queryHistoryRepository.save(user.login, query)
 
-        val quote = provider.getCheapestPrice(query) ?: throw PriceNotFoundException(query)
+        val quote = provider.getCheapestPrice(query)
 
         val currentPoint = PricePoint(
             checkedAt = quote.checkedAt,
