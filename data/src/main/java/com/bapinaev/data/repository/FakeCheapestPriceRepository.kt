@@ -10,7 +10,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 class FakeCheapestPriceRepository : CheapestPriceProvider {
-    override fun getCheapestPrice(query: FlightQuery): PriceQuote {
+    override suspend fun getCheapestPrice(query: FlightQuery): PriceQuote {
         return PriceQuote(
             query = query,
             price = Money(10500, query.currency),
