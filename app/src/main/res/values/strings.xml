@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FlightTracker</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="login_button">Войти</string>
+    <string name="user_full_name">%1$s %2$s</string>
+    <string name="user_login">Логин: %1$s</string>
+    <string name="user_age">Возраст: %1$d</string>
 </resources>
