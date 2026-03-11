@@ -6,4 +6,26 @@
     <string name="user_full_name">%1$s %2$s</string>
     <string name="user_login">Логин: %1$s</string>
     <string name="user_age">Возраст: %1$d</string>
+
+    <string name="nav_search">Поиск</string>
+    <string name="nav_favorites">Избранные</string>
+    <string name="nav_profile">Профиль</string>
+
+    <string name="search_title">Поиск авиабилетов</string>
+    <string name="search_origin_hint">Город вылета (MOW)</string>
+    <string name="search_destination_hint">Город прилёта (LED)</string>
+    <string name="search_date_hint">Дата (YYYY-MM-DD)</string>
+    <string name="search_direct_only">Только прямые</string>
+    <string name="search_find">Найти</string>
+    <string name="search_result_title">Найденный билет</string>
+    <string name="search_result_placeholder">Здесь появится результат</string>
+    <string name="search_type_direct">прямой</string>
+    <string name="search_type_with_stops">с пересадками</string>
+    <string name="search_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nТип: %4$s</string>
+    <string name="search_invalid_date_format">Неверный формат даты. Используй YYYY-MM-DD</string>
+    <string name="search_history_title">История запросов</string>
+    <string name="search_history_clear">Очистить</string>
+    <string name="search_history_item_template">%1$s → %2$s, %3$s, %4$s</string>
+
+    <string name="profile_stub_title">Экран профиля (заглушка)</string>
 </resources>

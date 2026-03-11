@@ -22,6 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false"
+            android:label="@string/nav_profile"
+            android:theme="@style/Theme.FlightTracker" />
         <activity android:name="com.bapinaev.flighttracker.screens.FavoritesActivity" />
         <activity
             android:name=".LoginActivity"
