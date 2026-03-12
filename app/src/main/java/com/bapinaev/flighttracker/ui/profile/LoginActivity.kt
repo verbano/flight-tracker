@@ -1,4 +1,4 @@
-package com.bapinaev.flighttracker
+package com.bapinaev.flighttracker.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapinaev.domain.model.User
+import com.bapinaev.flighttracker.R
 
 class LoginActivity : AppCompatActivity() {
 
@@ -45,4 +46,3 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 }
-

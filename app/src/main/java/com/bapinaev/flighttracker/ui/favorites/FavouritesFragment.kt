@@ -1,4 +1,4 @@
-package com.bapinaev.flighttracker.screens
+package com.bapinaev.flighttracker.ui.favorites
 
 
 import android.os.Bundle
