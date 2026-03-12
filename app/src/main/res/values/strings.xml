@@ -23,6 +23,12 @@
     <string name="search_type_with_stops">с пересадками</string>
     <string name="search_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nТип: %4$s</string>
     <string name="search_invalid_date_format">Неверный формат даты. Используй YYYY-MM-DD</string>
+    <string name="search_empty_fields_error">Заполни маршрут и дату перед поиском</string>
+    <string name="search_loading">Загрузка данных из API...</string>
+    <string name="search_request_error">Не удалось получить данные: %1$s</string>
+    <string name="search_unknown_error">неизвестная ошибка</string>
+    <string name="search_api_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nЦена: %4$d %5$s\nАвиакомпания: %6$s\nРейс: %7$s\nАэропорты: %8$s → %9$s\nПересадки: %10$s\nСсылка: %11$s</string>
+    <string name="search_transfers_direct">без пересадок</string>
     <string name="search_history_title">История запросов</string>
     <string name="search_history_clear">Очистить</string>
     <string name="search_history_item_template">%1$s → %2$s, %3$s, %4$s</string>

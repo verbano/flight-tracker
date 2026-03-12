@@ -5,8 +5,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface AviasalesApi {
-    @GET("/v3/prices_for_dates")
+    @GET("v3/prices_for_dates")
     suspend fun getCheapestPrice(
+        @Query("token")
+        token: String,
 
         @Query("origin")
         origin: String,

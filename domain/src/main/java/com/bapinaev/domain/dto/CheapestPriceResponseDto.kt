@@ -7,5 +7,5 @@ data class CheapestPriceResponseDto(
     val success: Boolean,
 
     @SerializedName("data")
-    val data: PriceDataDto
+    val data: List<PriceDataDto>
 )

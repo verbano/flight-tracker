@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="search_transfers_count">
+        <item quantity="one">%d пересадка</item>
+        <item quantity="few">%d пересадки</item>
+        <item quantity="many">%d пересадок</item>
+        <item quantity="other">%d пересадки</item>
+    </plurals>
+</resources>
