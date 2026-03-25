@@ -2,20 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:layout_marginBottom="12dp"
-    android:background="@android:color/white"
-    android:elevation="4dp"
-    android:clipToPadding="false">
+    android:background="@drawable/bg_ticket_card"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#000000"
         android:paddingBottom="4dp"/>
 
     <TextView
@@ -23,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="#333333"
+        android:textColor="@color/text_secondary"
         android:paddingBottom="2dp"/>
 
     <TextView
@@ -31,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="#333333"
+        android:textColor="@color/text_secondary"
         android:paddingBottom="2dp"/>
 
     <TextView
@@ -39,7 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="#333333"
+        android:textColor="@color/chip_text"
+        android:textStyle="bold"
         android:paddingBottom="4dp"/>
 
     <LinearLayout
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        android:paddingTop="8dp"
+        android:paddingTop="10dp"
         android:divider="?android:dividerVertical"
         android:showDividers="none">
 

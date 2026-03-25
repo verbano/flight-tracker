@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.google.android.material.chip.Chip
+import androidx.core.content.ContextCompat
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDate
@@ -45,6 +46,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             renderHistory()
         }
 
+        renderDemoInsights()
         renderHistory()
     }
 
@@ -87,6 +89,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
             }.onSuccess { quote ->
                 binding.tvResult.text = formatQuote(quote)
+                renderQuoteInsights(quote)
                 addHistoryItem(query)
             }.onFailure { error ->
                 binding.tvResult.text = getString(
@@ -160,6 +163,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             val chip = Chip(requireContext()).apply {
                 isClickable = true
                 isCheckable = false
+                chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.chip_bg)
+                setTextColor(ContextCompat.getColor(context, R.color.chip_text))
+                chipStrokeWidth = resources.displayMetrics.density
+                chipStrokeColor = ContextCompat.getColorStateList(context, R.color.stroke_soft)
                 text = getString(
                     R.string.search_history_item_template,
                     item.route.origin,
@@ -176,6 +183,26 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
             binding.chipsHistory.addView(chip)
         }
+    }
+
+    private fun renderDemoInsights() {
+        binding.routeTimeline.setTransfers(1)
+        binding.tvRouteCaption.text = getString(
+            R.string.search_insights_route_template,
+            "MOW",
+            "LED",
+            1
+        )
+    }
+
+    private fun renderQuoteInsights(quote: PriceQuote) {
+        binding.routeTimeline.setTransfers(quote.transfers)
+        binding.tvRouteCaption.text = getString(
+            R.string.search_insights_route_template,
+            quote.query.route.origin,
+            quote.query.route.destination,
+            quote.transfers
+        )
     }
 
     companion object {

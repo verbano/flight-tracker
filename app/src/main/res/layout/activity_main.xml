@@ -5,21 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Контент снизу по z-order; снег поверх, но под bottom_nav -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <com.jetradarmobile.snowfall.SnowfallView
+        android:id="@+id/snowfall_snow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:snowflakesNum="180"
+        app:snowflakeAlphaMin="180"
+        app:snowflakeAlphaMax="255"
+        app:snowflakeAngleMax="8"
+        app:snowflakeSizeMin="5dp"
+        app:snowflakeSizeMax="16dp"
+        app:snowflakeSpeedMin="2"
+        app:snowflakeSpeedMax="10"
+        app:snowflakesFadingEnabled="true"
+        app:snowflakesAlreadyFalling="true"
+        app:snowflakeImage="@drawable/ic_snowflake" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
+        android:background="@drawable/bg_nav_surface"
+        android:elevation="10dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="10dp"
         app:menu="@menu/bottom_nav_menu"
+        app:itemRippleColor="@android:color/transparent"
+        app:itemIconTint="@color/nav_item_tint"
+        app:itemTextColor="@color/nav_item_tint"
         app:labelVisibilityMode="labeled"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

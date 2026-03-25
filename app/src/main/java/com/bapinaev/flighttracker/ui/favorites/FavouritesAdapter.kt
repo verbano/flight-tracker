@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bapinaev.domain.model.FavouriteQuote
 import com.bapinaev.flighttracker.R
@@ -80,14 +81,17 @@ class FavoritesAdapter(
 
             val departureText = TextView(context).apply {
                 text = "Вылет: $departureTime"
+                setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
             }
 
             val durationText = TextView(context).apply {
                 text = "Длительность: ${flight.duration.toHours()} ч ${flight.duration.toMinutes() % 60} мин"
+                setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
             }
 
             val linkText = TextView(context).apply {
                 text = "Ссылка: ${quote.link}"
+                setTextColor(ContextCompat.getColor(context, R.color.chip_text))
             }
 
             val addedText = TextView(context).apply {
@@ -96,6 +100,7 @@ class FavoritesAdapter(
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
                 }"
+                setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
             }
 
             val checkedText = TextView(context).apply {
@@ -104,6 +109,7 @@ class FavoritesAdapter(
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
                 }"
+                setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
             }
 
             details.addView(departureText)
