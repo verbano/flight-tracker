@@ -11,7 +11,7 @@ class SaveQueryToHistoryUseCase(
     private val validator: FlightQueryValidator,
     private val sessionManager: SessionManager
 ) {
-    fun execute(query: FlightQuery) {
+    suspend fun execute(query: FlightQuery) {
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         validator.execute(query)

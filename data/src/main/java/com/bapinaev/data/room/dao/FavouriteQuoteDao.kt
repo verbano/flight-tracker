@@ -21,5 +21,5 @@ interface FavouriteQuoteDao {
     suspend fun getAll(userLogin: String): List<FavouriteQuoteEntity>
 
     @Query("DELETE FROM favourite_quotes WHERE id = :id")
-    suspend fun remove(id: Long)
+    suspend fun remove(id: Long): Int
 }

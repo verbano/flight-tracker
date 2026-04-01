@@ -11,5 +11,5 @@ class GetQueryHistoryUseCase(
 ) {
     val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
-    fun execute(): List<FlightQuery> = historyRepository.getHistory(user.login)
+    suspend fun execute(): List<FlightQuery> = historyRepository.getHistory(user.login)
 }

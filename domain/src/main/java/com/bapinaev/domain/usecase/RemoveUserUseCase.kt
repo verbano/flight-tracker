@@ -8,7 +8,7 @@ class RemoveUserUseCase (
     private val userRepository: UserRepository,
     private val sessionManager: SessionManager
 ) {
-    fun execute(login: String){
+    suspend fun execute(login: String){
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         userRepository.removeUser(user.login)

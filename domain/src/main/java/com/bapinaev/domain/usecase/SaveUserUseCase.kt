@@ -8,7 +8,7 @@ class SaveUserUseCase (
     private val userRepository: UserRepository,
     private val validator: UserValidator
 ) {
-    fun execute(user: User) {
+    suspend fun execute(user: User) {
         validator.execute(user)
 
         userRepository.save(user)

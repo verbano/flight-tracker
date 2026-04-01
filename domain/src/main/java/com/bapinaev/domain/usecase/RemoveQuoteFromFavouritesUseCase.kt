@@ -10,7 +10,7 @@ class RemoveQuoteFromFavouritesUseCase(
     private val sessionManager: SessionManager
 ) {
 
-    fun execute(quote: FavouriteQuote) {
+    suspend fun execute(quote: FavouriteQuote) {
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         if (quote.userLogin != user.login) {

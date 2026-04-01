@@ -10,7 +10,7 @@ class GetFavouriteQuotesUseCase(
     private val sessionManager: SessionManager
 ) {
 
-    fun execute(): List<FavouriteQuote> {
+    suspend fun execute(): List<FavouriteQuote> {
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         return favouritesRepository.getAll(user.login)

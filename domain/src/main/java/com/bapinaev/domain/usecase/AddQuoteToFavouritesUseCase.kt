@@ -12,7 +12,7 @@ class AddQuoteToFavouritesUseCase(
     private val sessionManager: SessionManager
 ) {
 
-    fun execute(quote: PriceQuote) {
+    suspend fun execute(quote: PriceQuote) {
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         val favouriteQuote = FavouriteQuote(

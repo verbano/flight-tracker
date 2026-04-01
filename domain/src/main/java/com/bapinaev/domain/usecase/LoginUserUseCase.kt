@@ -9,12 +9,9 @@ class LoginUserUseCase(
     private val userRepository: UserRepository,
     private val sessionManager: SessionManager
 ) {
-    fun execute(login: String, password: String): User {
-        val user = try {
-            userRepository.getUser(login)
-        } catch (e: Exception) {
-            throw InvalidCredentialsException("User with login '$login' not found")
-        }
+    suspend fun execute(login: String, password: String): User {
+        val user = userRepository.getUser(login)
+            ?: throw InvalidCredentialsException("User with login '$login' not found")
         
         if (user.password != password) {
             throw InvalidCredentialsException("Invalid password")
