@@ -3,7 +3,7 @@ package com.bapinaev.domain.repository
 import com.bapinaev.domain.model.FlightQuery
 
 interface QueryHistoryRepository {
-    fun save(userLogin: String, query: FlightQuery)
+    suspend fun save(userLogin: String, query: FlightQuery) : FlightQuery
 
-    fun getHistory(userLogin: String): List<FlightQuery>
+    suspend fun getHistory(userLogin: String): List<FlightQuery>
 }

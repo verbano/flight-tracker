@@ -1,4 +1,4 @@
-package com.bapinaev.data.repository
+package com.bapinaev.data.session
 
 import com.bapinaev.domain.model.User
 import com.bapinaev.domain.service.SessionManager
@@ -14,4 +14,3 @@ class InMemorySessionManager : SessionManager {
 
     override fun isUserLoggedIn(): Boolean = currentUser != null
 }
-

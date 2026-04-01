@@ -4,9 +4,9 @@ import com.bapinaev.domain.model.User
 
 interface UserRepository {
 
-    fun save(user: User)
+    suspend fun save(user: User)
 
-    fun getUser(userLogin: String): User
+    suspend fun getUser(userLogin: String): User?
 
-    fun removeUser(userLogin: String)
+    suspend fun removeUser(userLogin: String)
 }
