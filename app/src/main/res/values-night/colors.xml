@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_light">#0C1017</color>
+    <color name="surface_light">#1A2230</color>
+    <color name="text_primary">#E8EDF5</color>
+    <color name="text_secondary">#8B9AAF</color>
+    <color name="stroke_soft">#2D3A4D</color>
+    <color name="chip_bg">#243044</color>
+    <color name="chip_text">#8EC5FF</color>
+</resources>

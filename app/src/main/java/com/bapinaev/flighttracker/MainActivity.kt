@@ -21,8 +21,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         val isNight =
             (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-                    android.content.res.Configuration.UI_MODE_NIGHT_YES
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
         controller.isAppearanceLightStatusBars = !isNight
+        controller.isAppearanceLightNavigationBars = !isNight
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
 

@@ -2,11 +2,18 @@
 <resources>
 
     <style name="Theme.FlightTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_sky</item>
+        <item name="colorPrimaryVariant">@color/brand_blue</item>
+        <item name="colorSecondary">@color/brand_sky</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/bg_light</item>
 
         <item name="android:statusBarColor">@android:color/transparent</item>
 
         <item name="android:windowLightStatusBar">false</item>
-
+        <item name="android:navigationBarColor">@color/bg_light</item>
     </style>
 
 </resources>

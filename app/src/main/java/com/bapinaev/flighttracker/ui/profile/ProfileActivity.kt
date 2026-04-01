@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapinaev.domain.model.User
 import com.bapinaev.flighttracker.MainActivity
-import com.bapinaev.flighttracker.ui.profile.LoginActivity
 import com.bapinaev.flighttracker.R
 
 class ProfileActivity : AppCompatActivity() {
@@ -30,6 +30,12 @@ class ProfileActivity : AppCompatActivity() {
         val ageTextView = findViewById<TextView>(R.id.age)
         val logoutButton = findViewById<Button>(R.id.logoutBtn)
         val backBtn = findViewById<ImageButton>(R.id.backBtn)
+        findViewById<Button>(R.id.editBtn).setOnClickListener {
+            Toast.makeText(this, R.string.profile_edit_soon, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<Button>(R.id.deleteBtn).setOnClickListener {
+            Toast.makeText(this, R.string.profile_delete_soon, Toast.LENGTH_SHORT).show()
+        }
 
         nameTextView.text = getString(R.string.user_full_name, user.firstName, user.surname)
         loginTextView.text = getString(R.string.user_login, user.login)

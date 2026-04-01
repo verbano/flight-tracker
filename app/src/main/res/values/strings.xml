@@ -12,6 +12,8 @@
     <string name="nav_profile">Профиль</string>
 
     <string name="search_title">Поиск авиабилетов</string>
+    <string name="search_page_header">Летим выгодно</string>
+    <string name="search_page_subtitle">Сравнивай цены и находи лучший рейс за пару секунд</string>
     <string name="search_origin_hint">Город вылета (MOW)</string>
     <string name="search_destination_hint">Город прилёта (LED)</string>
     <string name="search_date_hint">Дата (YYYY-MM-DD)</string>
@@ -32,6 +34,23 @@
     <string name="search_history_title">История запросов</string>
     <string name="search_history_clear">Очистить</string>
     <string name="search_history_item_template">%1$s → %2$s, %3$s, %4$s</string>
+    <string name="search_insights_title">Аналитика по маршруту</string>
+    <string name="search_insights_route_placeholder">Маршрут и пересадки появятся после поиска</string>
+    <string name="search_insights_route_template">%1$s → %2$s • пересадок: %3$d</string>
 
     <string name="profile_stub_title">Экран профиля (заглушка)</string>
+    <string name="profile_title">Профиль</string>
+    <string name="profile_back">Назад</string>
+    <string name="profile_avatar">Аватар</string>
+    <string name="profile_section_account">Аккаунт</string>
+    <string name="profile_edit">Редактировать профиль</string>
+    <string name="profile_logout">Выйти</string>
+    <string name="profile_logout_full">Выйти из аккаунта</string>
+    <string name="profile_delete_account">Удалить аккаунт</string>
+    <string name="login_screen_title">Вход</string>
+    <string name="login_screen_subtitle">Войди, чтобы сохранять избранное и историю</string>
+    <string name="profile_edit_soon">Редактирование скоро будет доступно</string>
+    <string name="profile_delete_soon">Удаление аккаунта пока недоступно</string>
+    <string name="favorites_page_header">Избранные рейсы</string>
+    <string name="favorites_page_subtitle">Сохранили подборку, чтобы купить в нужный момент</string>
 </resources>
