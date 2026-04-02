@@ -62,22 +62,22 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, errorDetails = null) }
             runCatching { getCheapestPriceUseCase.execute(query) }
-                .onSuccess { result ->
+                .onSuccess { quote ->
                     _uiState.update { state ->
                         val newHistory = state.history.toMutableList().apply {
-                            remove(result.quote.query)
-                            add(0, result.quote.query)
+                            remove(quote.query)
+                            add(0, quote.query)
                             if (size > HISTORY_LIMIT) removeAt(lastIndex)
                         }
                         state.copy(
                             isLoading = false,
-                            quote = result.quote,
+                            quote = quote,
                             history = newHistory,
                             error = null,
                             errorDetails = null,
-                            insightOrigin = result.quote.query.route.origin,
-                            insightDestination = result.quote.query.route.destination,
-                            insightTransfers = result.quote.transfers
+                            insightOrigin = quote.query.route.origin,
+                            insightDestination = quote.query.route.destination,
+                            insightTransfers = quote.transfers
                         )
                     }
                 }

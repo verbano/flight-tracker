@@ -54,7 +54,6 @@ object AppGraph {
             getCheapestPriceUseCase = GetCheapestPriceUseCase(
                 provider = cheapestPriceProvider,
                 queryHistoryRepository = dependencies.queryHistoryRepository,
-                priceHistoryRepository = dependencies.priceHistoryRepository,
                 validator = FlightQueryValidator(),
                 sessionManager = dependencies.sessionManager
             )

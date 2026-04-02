@@ -2,10 +2,8 @@ package com.bapinaev.domain.usecase
 
 import com.bapinaev.domain.error.UserNotLoggedInException
 import com.bapinaev.domain.model.FlightQuery
-import com.bapinaev.domain.model.PriceCheckResult
-import com.bapinaev.domain.model.PricePoint
+import com.bapinaev.domain.model.PriceQuote
 import com.bapinaev.domain.repository.CheapestPriceProvider
-import com.bapinaev.domain.repository.PriceHistoryRepository
 import com.bapinaev.domain.repository.QueryHistoryRepository
 import com.bapinaev.domain.service.SessionManager
 import com.bapinaev.domain.service.FlightQueryValidator
@@ -13,41 +11,16 @@ import com.bapinaev.domain.service.FlightQueryValidator
 class GetCheapestPriceUseCase(
     private val provider: CheapestPriceProvider,
     private val queryHistoryRepository: QueryHistoryRepository,
-    private val priceHistoryRepository : PriceHistoryRepository,
     private val validator: FlightQueryValidator,
     private val sessionManager: SessionManager
 ) {
 
-    suspend fun execute(query: FlightQuery): PriceCheckResult {
+    suspend fun execute(query: FlightQuery): PriceQuote {
         validator.execute(query)
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
         val quote = provider.getCheapestPrice(query)
         val persistedQuery = queryHistoryRepository.save(user.login, quote.query)
-        val quoteWithPersistedQuery = quote.copy(query = persistedQuery)
-
-        val currentPoint = PricePoint(
-            checkedAt = quoteWithPersistedQuery.checkedAt,
-            price = quoteWithPersistedQuery.price
-        )
-
-        val history = priceHistoryRepository.getHistory(user.login, persistedQuery)
-        val previousPoint = history.lastOrNull()
-
-        priceHistoryRepository.save(user.login, persistedQuery, currentPoint)
-
-        val deltaAmount =
-            if (previousPoint != null)
-                currentPoint.price.amount - previousPoint.price.amount
-            else
-                null
-
-
-        return PriceCheckResult(
-            quote = quoteWithPersistedQuery,
-            previousPoint = previousPoint,
-            currentPoint = currentPoint,
-            deltaAmount = deltaAmount
-        )
+        return quote.copy(query = persistedQuery)
     }
 }

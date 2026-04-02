@@ -3,13 +3,11 @@ package com.bapinaev.data.di
 import android.content.Context
 import androidx.room.Room
 import com.bapinaev.data.repository.FavouriteQuotesRepositoryImpl
-import com.bapinaev.data.repository.PriceHistoryRepositoryImpl
 import com.bapinaev.data.repository.QueryHistoryRepositoryImpl
 import com.bapinaev.data.repository.UserRepositoryImpl
 import com.bapinaev.data.room.database.AppDatabase
 import com.bapinaev.data.session.InMemorySessionManager
 import com.bapinaev.domain.repository.FavouriteQuotesRepository
-import com.bapinaev.domain.repository.PriceHistoryRepository
 import com.bapinaev.domain.repository.QueryHistoryRepository
 import com.bapinaev.domain.repository.UserRepository
 import com.bapinaev.domain.service.SessionManager
@@ -17,7 +15,6 @@ import com.bapinaev.domain.service.SessionManager
 data class DataDependencies(
     val userRepository: UserRepository,
     val queryHistoryRepository: QueryHistoryRepository,
-    val priceHistoryRepository: PriceHistoryRepository,
     val favouriteQuotesRepository: FavouriteQuotesRepository,
     val sessionManager: SessionManager
 )
@@ -32,12 +29,13 @@ object DataModule {
             appContext,
             AppDatabase::class.java,
             DATABASE_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
         return DataDependencies(
             userRepository = UserRepositoryImpl(database.userDao()),
             queryHistoryRepository = QueryHistoryRepositoryImpl(database.flightQueryDao()),
-            priceHistoryRepository = PriceHistoryRepositoryImpl(database.pricePointDao()),
             favouriteQuotesRepository = FavouriteQuotesRepositoryImpl(database.favouriteQuoteDao()),
             sessionManager = InMemorySessionManager()
         )
