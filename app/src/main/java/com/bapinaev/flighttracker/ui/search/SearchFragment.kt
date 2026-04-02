@@ -4,21 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.bapinaev.data.repository.RetrofitCheapestPriceRepository
 import com.bapinaev.flighttracker.R
 import com.bapinaev.flighttracker.databinding.FragmentSearchBinding
+import com.bapinaev.flighttracker.di.AppGraph
 import com.bapinaev.domain.model.Currency
 import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.PriceQuote
 import com.bapinaev.domain.model.Route
-import com.bapinaev.domain.service.AviasalesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.google.android.material.chip.Chip
 import androidx.core.content.ContextCompat
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDate
 import java.util.Locale
 
@@ -26,16 +23,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private val cheapestPriceProvider by lazy {
-        RetrofitCheapestPriceRepository(
-            api = createApi(),
-            token = API_TOKEN
-        )
-    }
+    private val searchHistory = mutableListOf<FlightQuery>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
+        AppGraph.ensureInitialized(requireContext().applicationContext)
 
         binding.btnFind.setOnClickListener {
             searchCheapestTicket()
@@ -47,7 +40,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         renderDemoInsights()
-        renderHistory()
+        viewLifecycleOwner.lifecycleScope.launch {
+            loadHistoryFromDataSource()
+        }
     }
 
     override fun onDestroyView() {
@@ -85,12 +80,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
             runCatching {
                 withContext(Dispatchers.IO) {
-                    cheapestPriceProvider.getCheapestPrice(query)
+                    AppGraph.getCheapestPriceUseCase.execute(query)
                 }
-            }.onSuccess { quote ->
-                binding.tvResult.text = formatQuote(quote)
-                renderQuoteInsights(quote)
-                addHistoryItem(query)
+            }.onSuccess { result ->
+                binding.tvResult.text = formatQuote(result.quote)
+                renderQuoteInsights(result.quote)
+                addHistoryItem(result.quote.query)
             }.onFailure { error ->
                 binding.tvResult.text = getString(
                     R.string.search_request_error,
@@ -133,16 +128,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
     }
 
-    private fun createApi(): AviasalesApi {
-        return Retrofit.Builder()
-            .baseUrl(API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(AviasalesApi::class.java)
-    }
-
     private fun addHistoryItem(item: FlightQuery) {
-        // temp
         searchHistory.remove(item)
         searchHistory.add(0, item)
         if (searchHistory.size > HISTORY_LIMIT) {
@@ -151,8 +137,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         renderHistory()
     }
 
+    private suspend fun loadHistoryFromDataSource() {
+        val loaded = withContext(Dispatchers.IO) {
+            AppGraph.getQueryHistoryUseCase.execute()
+        }
+        searchHistory.clear()
+        searchHistory.addAll(loaded)
+        renderHistory()
+    }
+
     private fun renderHistory() {
-        // temp
         binding.chipsHistory.removeAllViews()
         val hasHistory = searchHistory.isNotEmpty()
         binding.tvHistoryTitle.visibility = if (hasHistory) View.VISIBLE else View.GONE
@@ -206,10 +200,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     companion object {
-        private const val API_BASE_URL = "https://api.travelpayouts.com/aviasales/"
-        private const val API_TOKEN = "22264ae54b94ea73742acc78c9c0490f"
-        // temp
         private const val HISTORY_LIMIT = 8
-        private val searchHistory = mutableListOf<FlightQuery>()
     }
 }

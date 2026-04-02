@@ -1,14 +1,14 @@
 package com.bapinaev.data.repository
 
-import com.bapinaev.domain.dto.CheapestPriceRequestDto
-import com.bapinaev.domain.dto.PriceDataDto
+import com.bapinaev.data.network.AviasalesApi
+import com.bapinaev.data.network.dto.CheapestPriceRequestDto
+import com.bapinaev.data.network.dto.PriceDataDto
 import com.bapinaev.domain.error.PriceNotFoundException
 import com.bapinaev.domain.model.FlightInfo
 import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.Money
 import com.bapinaev.domain.model.PriceQuote
 import com.bapinaev.domain.repository.CheapestPriceProvider
-import com.bapinaev.domain.service.AviasalesApi
 import java.time.Duration
 import java.time.Instant
 import java.time.OffsetDateTime

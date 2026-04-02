@@ -1,6 +1,5 @@
 package com.bapinaev.domain.usecase
 
-import com.bapinaev.domain.error.PriceNotFoundException
 import com.bapinaev.domain.error.UserNotLoggedInException
 import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.PriceCheckResult
@@ -23,19 +22,19 @@ class GetCheapestPriceUseCase(
         validator.execute(query)
         val user = sessionManager.getCurrentUser() ?: throw UserNotLoggedInException()
 
-        queryHistoryRepository.save(user.login, query)
-
         val quote = provider.getCheapestPrice(query)
+        val persistedQuery = queryHistoryRepository.save(user.login, quote.query)
+        val quoteWithPersistedQuery = quote.copy(query = persistedQuery)
 
         val currentPoint = PricePoint(
-            checkedAt = quote.checkedAt,
-            price = quote.price
+            checkedAt = quoteWithPersistedQuery.checkedAt,
+            price = quoteWithPersistedQuery.price
         )
 
-        val history = priceHistoryRepository.getHistory(user.login, query)
+        val history = priceHistoryRepository.getHistory(user.login, persistedQuery)
         val previousPoint = history.lastOrNull()
 
-        priceHistoryRepository.save(user.login, query, currentPoint)
+        priceHistoryRepository.save(user.login, persistedQuery, currentPoint)
 
         val deltaAmount =
             if (previousPoint != null)
@@ -45,7 +44,7 @@ class GetCheapestPriceUseCase(
 
 
         return PriceCheckResult(
-            quote = quote,
+            quote = quoteWithPersistedQuery,
             previousPoint = previousPoint,
             currentPoint = currentPoint,
             deltaAmount = deltaAmount
