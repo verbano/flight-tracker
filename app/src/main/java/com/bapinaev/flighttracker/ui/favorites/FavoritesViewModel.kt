@@ -1,73 +1,76 @@
 package com.bapinaev.flighttracker.ui.favorites
 
 import androidx.lifecycle.ViewModel
-import com.bapinaev.domain.model.Currency
 import com.bapinaev.domain.model.FavouriteQuote
-import com.bapinaev.domain.model.FlightInfo
-import com.bapinaev.domain.model.FlightQuery
-import com.bapinaev.domain.model.Money
-import com.bapinaev.domain.model.PriceQuote
-import com.bapinaev.domain.model.Route
+import com.bapinaev.domain.usecase.GetFavouriteQuotesUseCase
+import com.bapinaev.domain.usecase.RemoveQuoteFromFavouritesUseCase
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDate
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class FavoritesViewModel : ViewModel() {
+class FavoritesViewModel(
+    private val getFavouriteQuotesUseCase: GetFavouriteQuotesUseCase,
+    private val removeQuoteFromFavouritesUseCase: RemoveQuoteFromFavouritesUseCase
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(
-        FavoritesUiState(favorites = generateMockFavorites())
-    )
+    private val _uiState = MutableStateFlow(FavoritesUiState(isLoading = true))
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
+    private val _events = MutableSharedFlow<FavoritesEvent>()
+    val events: SharedFlow<FavoritesEvent> = _events.asSharedFlow()
 
-    private fun generateMockFavorites(): List<FavouriteQuote> {
-        return listOf(
-            FavouriteQuote(
-                userLogin = "demo",
-                addedAt = Instant.now(),
-                quote = PriceQuote(
-                    query = FlightQuery(
-                        route = Route("MOW", "AER"),
-                        departureDate = LocalDate.now().plusDays(5)
-                    ),
-                    price = Money(8900, Currency.RUB),
-                    transfers = 0,
-                    checkedAt = Instant.now(),
-                    flight = FlightInfo(
-                        airline = "Aeroflot",
-                        flightNumber = "SU123",
-                        originAirport = "MOW",
-                        destinationAirport = "AER",
-                        departureAt = Instant.now(),
-                        duration = Duration.ofHours(3)
-                    ),
-                    link = "https://example.com"
-                )
-            ),
-            FavouriteQuote(
-                userLogin = "demo",
-                addedAt = Instant.now(),
-                quote = PriceQuote(
-                    query = FlightQuery(
-                        route = Route("LED", "KZN"),
-                        departureDate = LocalDate.now().plusDays(10)
-                    ),
-                    price = Money(4500, Currency.RUB),
-                    transfers = 1,
-                    checkedAt = Instant.now(),
-                    flight = FlightInfo(
-                        airline = "S7",
-                        flightNumber = "S7101",
-                        originAirport = "LED",
-                        destinationAirport = "KZN",
-                        departureAt = Instant.now(),
-                        duration = Duration.ofHours(2).plusMinutes(30)
-                    ),
-                    link = "https://example.com"
-                )
-            )
-        )
+    init {
+        loadFavorites()
     }
+
+    fun loadFavorites() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            runCatching { getFavouriteQuotesUseCase.execute() }
+                .onSuccess { favourites ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            favorites = favourites,
+                            errorMessage = null
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = error.message ?: "Unknown error"
+                        )
+                    }
+                }
+        }
+    }
+
+    fun removeFavorite(favouriteQuote: FavouriteQuote) {
+        viewModelScope.launch {
+            runCatching { removeQuoteFromFavouritesUseCase.execute(favouriteQuote) }
+                .onSuccess {
+                    _events.emit(FavoritesEvent.FavoriteRemoved)
+                    loadFavorites()
+                }
+                .onFailure { error ->
+                    _events.emit(
+                        FavoritesEvent.FavoriteRemoveFailed(
+                            details = error.message ?: "Unknown error"
+                        )
+                    )
+                }
+        }
+    }
+}
+
+sealed interface FavoritesEvent {
+    data object FavoriteRemoved : FavoritesEvent
+    data class FavoriteRemoveFailed(val details: String) : FavoritesEvent
 }

@@ -2,6 +2,7 @@ package com.bapinaev.flighttracker.ui.search
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -24,7 +25,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val viewModel: SearchViewModel by viewModels {
         SearchViewModelFactory(
             getCheapestPriceUseCase = AppGraph.getCheapestPriceUseCase,
-            getQueryHistoryUseCase = AppGraph.getQueryHistoryUseCase
+            getQueryHistoryUseCase = AppGraph.getQueryHistoryUseCase,
+            addQuoteToFavouritesUseCase = AppGraph.addQuoteToFavouritesUseCase
         )
     }
 
@@ -45,10 +47,34 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.btnClearHistory.setOnClickListener {
             viewModel.clearHistoryDisplay()
         }
+        binding.btnAddToFavorites.setOnClickListener {
+            viewModel.addCurrentQuoteToFavorites()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { renderState(it) }
+                launch { viewModel.uiState.collect { renderState(it) } }
+                launch {
+                    viewModel.events.collect { event ->
+                        when (event) {
+                            SearchEvent.FavoriteAdded -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.search_favorite_added),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            is SearchEvent.FavoriteAddFailed -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.search_favorite_error, event.details),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -134,6 +160,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun renderState(state: SearchUiState) {
         setLoadingState(state.isLoading)
+        binding.btnAddToFavorites.visibility =
+            if (state.canAddToFavorites) View.VISIBLE else View.GONE
         renderHistory(state.history)
         renderInsights(
             origin = state.insightOrigin,

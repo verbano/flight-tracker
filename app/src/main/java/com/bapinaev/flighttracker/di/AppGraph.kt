@@ -5,8 +5,11 @@ import com.bapinaev.data.di.DataModule
 import com.bapinaev.data.network.ApiFactory
 import com.bapinaev.data.repository.RetrofitCheapestPriceRepository
 import com.bapinaev.domain.model.User
+import com.bapinaev.domain.usecase.AddQuoteToFavouritesUseCase
 import com.bapinaev.domain.usecase.GetCheapestPriceUseCase
+import com.bapinaev.domain.usecase.GetFavouriteQuotesUseCase
 import com.bapinaev.domain.usecase.GetQueryHistoryUseCase
+import com.bapinaev.domain.usecase.RemoveQuoteFromFavouritesUseCase
 import com.bapinaev.domain.service.FlightQueryValidator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -23,6 +26,15 @@ object AppGraph {
         private set
 
     lateinit var getQueryHistoryUseCase: GetQueryHistoryUseCase
+        private set
+
+    lateinit var addQuoteToFavouritesUseCase: AddQuoteToFavouritesUseCase
+        private set
+
+    lateinit var getFavouriteQuotesUseCase: GetFavouriteQuotesUseCase
+        private set
+
+    lateinit var removeQuoteFromFavouritesUseCase: RemoveQuoteFromFavouritesUseCase
         private set
 
     fun ensureInitialized(context: Context) {
@@ -60,6 +72,21 @@ object AppGraph {
 
             getQueryHistoryUseCase = GetQueryHistoryUseCase(
                 historyRepository = dependencies.queryHistoryRepository,
+                sessionManager = dependencies.sessionManager
+            )
+
+            addQuoteToFavouritesUseCase = AddQuoteToFavouritesUseCase(
+                favouritesRepository = dependencies.favouriteQuotesRepository,
+                sessionManager = dependencies.sessionManager
+            )
+
+            getFavouriteQuotesUseCase = GetFavouriteQuotesUseCase(
+                favouritesRepository = dependencies.favouriteQuotesRepository,
+                sessionManager = dependencies.sessionManager
+            )
+
+            removeQuoteFromFavouritesUseCase = RemoveQuoteFromFavouritesUseCase(
+                favouritesRepository = dependencies.favouriteQuotesRepository,
                 sessionManager = dependencies.sessionManager
             )
 

@@ -2,17 +2,23 @@ package com.bapinaev.flighttracker.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bapinaev.domain.usecase.AddQuoteToFavouritesUseCase
 import com.bapinaev.domain.usecase.GetCheapestPriceUseCase
 import com.bapinaev.domain.usecase.GetQueryHistoryUseCase
 
 class SearchViewModelFactory(
     private val getCheapestPriceUseCase: GetCheapestPriceUseCase,
-    private val getQueryHistoryUseCase: GetQueryHistoryUseCase
+    private val getQueryHistoryUseCase: GetQueryHistoryUseCase,
+    private val addQuoteToFavouritesUseCase: AddQuoteToFavouritesUseCase
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            return SearchViewModel(getCheapestPriceUseCase, getQueryHistoryUseCase) as T
+            return SearchViewModel(
+                getCheapestPriceUseCase = getCheapestPriceUseCase,
+                getQueryHistoryUseCase = getQueryHistoryUseCase,
+                addQuoteToFavouritesUseCase = addQuoteToFavouritesUseCase
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

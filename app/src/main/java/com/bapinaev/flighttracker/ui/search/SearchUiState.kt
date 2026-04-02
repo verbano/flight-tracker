@@ -6,6 +6,7 @@ import com.bapinaev.domain.model.PriceQuote
 data class SearchUiState(
     val isLoading: Boolean = false,
     val quote: PriceQuote? = null,
+    val canAddToFavorites: Boolean = false,
     val history: List<FlightQuery> = emptyList(),
     val error: SearchError? = null,
     val errorDetails: String? = null,

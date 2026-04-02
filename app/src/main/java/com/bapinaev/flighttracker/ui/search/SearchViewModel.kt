@@ -5,11 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.bapinaev.domain.model.Currency
 import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.Route
+import com.bapinaev.domain.usecase.AddQuoteToFavouritesUseCase
 import com.bapinaev.domain.usecase.GetCheapestPriceUseCase
 import com.bapinaev.domain.usecase.GetQueryHistoryUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -17,11 +21,14 @@ import java.util.Locale
 
 class SearchViewModel(
     private val getCheapestPriceUseCase: GetCheapestPriceUseCase,
-    private val getQueryHistoryUseCase: GetQueryHistoryUseCase
+    private val getQueryHistoryUseCase: GetQueryHistoryUseCase,
+    private val addQuoteToFavouritesUseCase: AddQuoteToFavouritesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
+    private val _events = MutableSharedFlow<SearchEvent>()
+    val events: SharedFlow<SearchEvent> = _events.asSharedFlow()
 
     init {
         loadHistory()
@@ -72,6 +79,7 @@ class SearchViewModel(
                         state.copy(
                             isLoading = false,
                             quote = quote,
+                            canAddToFavorites = true,
                             history = newHistory,
                             error = null,
                             errorDetails = null,
@@ -86,6 +94,7 @@ class SearchViewModel(
                         it.copy(
                             isLoading = false,
                             quote = null,
+                            canAddToFavorites = false,
                             error = SearchError.REQUEST_FAILED,
                             errorDetails = error.message
                         )
@@ -96,6 +105,22 @@ class SearchViewModel(
 
     fun clearHistoryDisplay() {
         _uiState.update { it.copy(history = emptyList()) }
+    }
+
+    fun addCurrentQuoteToFavorites() {
+        val quote = _uiState.value.quote ?: return
+
+        viewModelScope.launch {
+            runCatching { addQuoteToFavouritesUseCase.execute(quote) }
+                .onSuccess { _events.emit(SearchEvent.FavoriteAdded) }
+                .onFailure { error ->
+                    _events.emit(
+                        SearchEvent.FavoriteAddFailed(
+                            details = error.message ?: "unknown error"
+                        )
+                    )
+                }
+        }
     }
 
     private fun loadHistory() {
@@ -115,4 +140,9 @@ class SearchViewModel(
     private companion object {
         private const val HISTORY_LIMIT = 8
     }
+}
+
+sealed interface SearchEvent {
+    data object FavoriteAdded : SearchEvent
+    data class FavoriteAddFailed(val details: String) : SearchEvent
 }

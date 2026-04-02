@@ -31,6 +31,9 @@
     <string name="search_unknown_error">неизвестная ошибка</string>
     <string name="search_api_result_template">Маршрут: %1$s → %2$s\nДата: %3$s\nЦена: %4$d %5$s\nАвиакомпания: %6$s\nРейс: %7$s\nАэропорты: %8$s → %9$s\nПересадки: %10$s\nСсылка: %11$s</string>
     <string name="search_transfers_direct">без пересадок</string>
+    <string name="search_add_to_favorites">Добавить в избранные</string>
+    <string name="search_favorite_added">Билет добавлен в избранное</string>
+    <string name="search_favorite_error">Не удалось добавить в избранное: %1$s</string>
     <string name="search_history_title">История запросов</string>
     <string name="search_history_clear">Очистить</string>
     <string name="search_history_item_template">%1$s → %2$s, %3$s, %4$s</string>
@@ -53,4 +56,7 @@
     <string name="profile_delete_soon">Удаление аккаунта пока недоступно</string>
     <string name="favorites_page_header">Избранные рейсы</string>
     <string name="favorites_page_subtitle">Сохранили подборку, чтобы купить в нужный момент</string>
+    <string name="favorites_removed">Удалено из избранного</string>
+    <string name="favorites_remove_error">Не удалось удалить: %1$s</string>
+    <string name="favorites_empty">Список избранного пока пуст</string>
 </resources>

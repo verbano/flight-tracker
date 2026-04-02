@@ -13,7 +13,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class FavoritesAdapter(
-    items: List<FavouriteQuote>
+    items: List<FavouriteQuote>,
+    private val onLongClickRemove: (FavouriteQuote) -> Unit
 ) : RecyclerView.Adapter<FavoritesAdapter.FavoriteViewHolder>() {
     private val items: MutableList<FavouriteQuote> = items.toMutableList()
 
@@ -24,7 +25,7 @@ class FavoritesAdapter(
     }
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], onLongClickRemove)
     }
 
     override fun getItemCount(): Int = items.size
@@ -46,7 +47,10 @@ class FavoritesAdapter(
         private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-        fun bind(favourite: FavouriteQuote) {
+        fun bind(
+            favourite: FavouriteQuote,
+            onLongClickRemove: (FavouriteQuote) -> Unit
+        ) {
 
             val quote = favourite.quote
             val flight = quote.flight
@@ -70,6 +74,11 @@ class FavoritesAdapter(
                         View.GONE
                     else
                         View.VISIBLE
+            }
+
+            itemView.setOnLongClickListener {
+                onLongClickRemove(favourite)
+                true
             }
         }
 
