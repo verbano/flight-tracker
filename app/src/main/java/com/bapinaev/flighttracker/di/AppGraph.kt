@@ -43,7 +43,10 @@ object AppGraph {
 
             runBlocking {
                 withContext(Dispatchers.IO) {
-                    dependencies.userRepository.save(defaultUser)
+                    val existingUser = dependencies.userRepository.getUser(defaultUser.login)
+                    if (existingUser == null) {
+                        dependencies.userRepository.save(defaultUser)
+                    }
                 }
             }
             dependencies.sessionManager.setCurrentUser(defaultUser)

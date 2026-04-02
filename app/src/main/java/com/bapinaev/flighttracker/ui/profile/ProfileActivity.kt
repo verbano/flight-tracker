@@ -7,19 +7,17 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bapinaev.domain.model.User
+import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bapinaev.flighttracker.MainActivity
 import com.bapinaev.flighttracker.R
+import kotlinx.coroutines.launch
 
 class ProfileActivity : AppCompatActivity() {
 
-    private val user = User(
-        firstName = "Джон",
-        surname = "Самолет",
-        age = 25,
-        login = "admin",
-        password = "1234"
-    )
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,29 +28,63 @@ class ProfileActivity : AppCompatActivity() {
         val ageTextView = findViewById<TextView>(R.id.age)
         val logoutButton = findViewById<Button>(R.id.logoutBtn)
         val backBtn = findViewById<ImageButton>(R.id.backBtn)
-        findViewById<Button>(R.id.editBtn).setOnClickListener {
-            Toast.makeText(this, R.string.profile_edit_soon, Toast.LENGTH_SHORT).show()
-        }
-        findViewById<Button>(R.id.deleteBtn).setOnClickListener {
-            Toast.makeText(this, R.string.profile_delete_soon, Toast.LENGTH_SHORT).show()
-        }
+        val editButton = findViewById<Button>(R.id.editBtn)
+        val deleteButton = findViewById<Button>(R.id.deleteBtn)
 
-        nameTextView.text = getString(R.string.user_full_name, user.firstName, user.surname)
-        loginTextView.text = getString(R.string.user_login, user.login)
-        ageTextView.text = getString(R.string.user_age, user.age)
+        editButton.setOnClickListener { viewModel.onEditClicked() }
+        deleteButton.setOnClickListener { viewModel.onDeleteClicked() }
+        logoutButton.setOnClickListener { viewModel.onLogoutClicked() }
+        backBtn.setOnClickListener { viewModel.onBackClicked() }
 
-        logoutButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState.collect { state ->
+                        nameTextView.text = getString(
+                            R.string.user_full_name,
+                            state.user.firstName,
+                            state.user.surname
+                        )
+                        loginTextView.text = getString(R.string.user_login, state.user.login)
+                        ageTextView.text = getString(R.string.user_age, state.user.age)
+                    }
+                }
+                launch {
+                    viewModel.events.collect { event ->
+                        when (event) {
+                            ProfileEvent.ShowEditSoon -> {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    R.string.profile_edit_soon,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
-        backBtn.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+                            ProfileEvent.ShowDeleteSoon -> {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    R.string.profile_delete_soon,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            ProfileEvent.NavigateToLogin -> {
+                                val intent = Intent(this@ProfileActivity, LoginActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+
+                            ProfileEvent.NavigateToMain -> {
+                                val intent = Intent(this@ProfileActivity, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

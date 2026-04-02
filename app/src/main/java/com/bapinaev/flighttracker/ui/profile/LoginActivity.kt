@@ -6,18 +6,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bapinaev.domain.model.User
+import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bapinaev.flighttracker.R
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private val hardcodedUser = User(
-        firstName = "Джон",
-        surname = "Самолет",
-        age = 25,
-        login = "admin",
-        password = "1234"
-    )
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,20 +26,38 @@ class LoginActivity : AppCompatActivity() {
         val loginBtn = findViewById<Button>(R.id.loginBtn)
 
         loginBtn.setOnClickListener {
-            val login = loginEdit.text.toString()
-            val password = passwordEdit.text.toString()
+            viewModel.onLoginClicked(
+                login = loginEdit.text?.toString().orEmpty(),
+                password = passwordEdit.text?.toString().orEmpty()
+            )
+        }
 
-            if (login.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { event ->
+                    when (event) {
+                        LoginEvent.EmptyFields -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Заполните все поля",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-            if (login == hardcodedUser.login && password == hardcodedUser.password) {
-                val intent = Intent(this, ProfileActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show()
+                        LoginEvent.InvalidCredentials -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Неверный логин или пароль",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        LoginEvent.NavigateToProfile -> {
+                            startActivity(Intent(this@LoginActivity, ProfileActivity::class.java))
+                            finish()
+                        }
+                    }
+                }
             }
         }
     }

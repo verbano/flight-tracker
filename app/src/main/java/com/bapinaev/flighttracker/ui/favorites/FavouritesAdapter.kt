@@ -13,8 +13,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class FavoritesAdapter(
-    private val items: List<FavouriteQuote>
+    items: List<FavouriteQuote>
 ) : RecyclerView.Adapter<FavoritesAdapter.FavoriteViewHolder>() {
+    private val items: MutableList<FavouriteQuote> = items.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -27,6 +28,12 @@ class FavoritesAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun submitList(newItems: List<FavouriteQuote>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
 
     class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

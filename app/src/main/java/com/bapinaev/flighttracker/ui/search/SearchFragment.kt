@@ -3,27 +3,30 @@ package com.bapinaev.flighttracker.ui.search
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bapinaev.flighttracker.R
 import com.bapinaev.flighttracker.databinding.FragmentSearchBinding
 import com.bapinaev.flighttracker.di.AppGraph
-import com.bapinaev.domain.model.Currency
 import com.bapinaev.domain.model.FlightQuery
 import com.bapinaev.domain.model.PriceQuote
-import com.bapinaev.domain.model.Route
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import com.google.android.material.chip.Chip
 import androidx.core.content.ContextCompat
-import java.time.LocalDate
-import java.util.Locale
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private val searchHistory = mutableListOf<FlightQuery>()
+
+    private val viewModel: SearchViewModel by viewModels {
+        SearchViewModelFactory(
+            getCheapestPriceUseCase = AppGraph.getCheapestPriceUseCase,
+            getQueryHistoryUseCase = AppGraph.getQueryHistoryUseCase
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,70 +34,28 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         AppGraph.ensureInitialized(requireContext().applicationContext)
 
         binding.btnFind.setOnClickListener {
-            searchCheapestTicket()
+            viewModel.search(
+                originInput = binding.etOrigin.text?.toString().orEmpty(),
+                destinationInput = binding.etDestination.text?.toString().orEmpty(),
+                dateInput = binding.etDate.text?.toString().orEmpty(),
+                direct = binding.checkboxDirect.isChecked
+            )
         }
 
         binding.btnClearHistory.setOnClickListener {
-            searchHistory.clear()
-            renderHistory()
+            viewModel.clearHistoryDisplay()
         }
 
-        renderDemoInsights()
         viewLifecycleOwner.lifecycleScope.launch {
-            loadHistoryFromDataSource()
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { renderState(it) }
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun searchCheapestTicket() {
-        val origin = binding.etOrigin.text?.toString()?.trim().orEmpty().uppercase(Locale.getDefault())
-        val destination = binding.etDestination.text?.toString()?.trim().orEmpty().uppercase(Locale.getDefault())
-        val date = binding.etDate.text?.toString()?.trim().orEmpty()
-        val direct = binding.checkboxDirect.isChecked
-
-        if (origin.isBlank() || destination.isBlank() || date.isBlank()) {
-            binding.tvResult.text = getString(R.string.search_empty_fields_error)
-            return
-        }
-
-        val departureDate = runCatching { LocalDate.parse(date) }.getOrNull()
-        if (departureDate == null) {
-            binding.tvResult.text = getString(R.string.search_invalid_date_format)
-            return
-        }
-
-        val query = FlightQuery(
-            route = Route(origin = origin, destination = destination),
-            departureDate = departureDate,
-            currency = Currency.RUB,
-            direct = direct
-        )
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            setLoadingState(isLoading = true)
-            binding.tvResult.text = getString(R.string.search_loading)
-
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    AppGraph.getCheapestPriceUseCase.execute(query)
-                }
-            }.onSuccess { result ->
-                binding.tvResult.text = formatQuote(result.quote)
-                renderQuoteInsights(result.quote)
-                addHistoryItem(result.quote.query)
-            }.onFailure { error ->
-                binding.tvResult.text = getString(
-                    R.string.search_request_error,
-                    error.message ?: getString(R.string.search_unknown_error)
-                )
-            }
-
-            setLoadingState(isLoading = false)
-        }
     }
 
     private fun setLoadingState(isLoading: Boolean) {
@@ -128,32 +89,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
     }
 
-    private fun addHistoryItem(item: FlightQuery) {
-        searchHistory.remove(item)
-        searchHistory.add(0, item)
-        if (searchHistory.size > HISTORY_LIMIT) {
-            searchHistory.removeAt(searchHistory.lastIndex)
-        }
-        renderHistory()
-    }
-
-    private suspend fun loadHistoryFromDataSource() {
-        val loaded = withContext(Dispatchers.IO) {
-            AppGraph.getQueryHistoryUseCase.execute()
-        }
-        searchHistory.clear()
-        searchHistory.addAll(loaded)
-        renderHistory()
-    }
-
-    private fun renderHistory() {
+    private fun renderHistory(history: List<FlightQuery>) {
         binding.chipsHistory.removeAllViews()
-        val hasHistory = searchHistory.isNotEmpty()
+        val hasHistory = history.isNotEmpty()
         binding.tvHistoryTitle.visibility = if (hasHistory) View.VISIBLE else View.GONE
         binding.btnClearHistory.visibility = if (hasHistory) View.VISIBLE else View.GONE
         binding.chipsHistory.visibility = if (hasHistory) View.VISIBLE else View.GONE
 
-        searchHistory.forEach { item ->
+        history.forEach { item ->
             val chip = Chip(requireContext()).apply {
                 isClickable = true
                 isCheckable = false
@@ -179,27 +122,35 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun renderDemoInsights() {
-        binding.routeTimeline.setTransfers(1)
+    private fun renderInsights(origin: String, destination: String, transfers: Int) {
+        binding.routeTimeline.setTransfers(transfers)
         binding.tvRouteCaption.text = getString(
             R.string.search_insights_route_template,
-            "MOW",
-            "LED",
-            1
+            origin,
+            destination,
+            transfers
         )
     }
 
-    private fun renderQuoteInsights(quote: PriceQuote) {
-        binding.routeTimeline.setTransfers(quote.transfers)
-        binding.tvRouteCaption.text = getString(
-            R.string.search_insights_route_template,
-            quote.query.route.origin,
-            quote.query.route.destination,
-            quote.transfers
+    private fun renderState(state: SearchUiState) {
+        setLoadingState(state.isLoading)
+        renderHistory(state.history)
+        renderInsights(
+            origin = state.insightOrigin,
+            destination = state.insightDestination,
+            transfers = state.insightTransfers
         )
-    }
 
-    companion object {
-        private const val HISTORY_LIMIT = 8
+        binding.tvResult.text = when {
+            state.isLoading -> getString(R.string.search_loading)
+            state.quote != null -> formatQuote(state.quote)
+            state.error == SearchError.EMPTY_FIELDS -> getString(R.string.search_empty_fields_error)
+            state.error == SearchError.INVALID_DATE_FORMAT -> getString(R.string.search_invalid_date_format)
+            state.error == SearchError.REQUEST_FAILED -> getString(
+                R.string.search_request_error,
+                state.errorDetails ?: getString(R.string.search_unknown_error)
+            )
+            else -> binding.tvResult.text
+        }
     }
 }
