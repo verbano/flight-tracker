@@ -59,4 +59,8 @@
     <string name="favorites_removed">Удалено из избранного</string>
     <string name="favorites_remove_error">Не удалось удалить: %1$s</string>
     <string name="favorites_empty">Список избранного пока пуст</string>
+    <string name="sdui_no_connection_title">Нет подключения</string>
+    <string name="sdui_no_connection_subtitle">Не удалось загрузить экран с сервера.\nПроверь интернет и попробуй снова.</string>
+    <string name="sdui_retry">Повторить</string>
+    <string name="sdui_skip">Продолжить без сети</string>
 </resources>
