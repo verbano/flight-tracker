@@ -22,5 +22,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "FlightTracker"
 include(":app")
+include(":designsystem")
 include(":domain")
 include(":data")

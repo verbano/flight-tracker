@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ds_space_xs">4dp</dimen>
+    <dimen name="ds_space_sm">8dp</dimen>
+    <dimen name="ds_space_md">12dp</dimen>
+    <dimen name="ds_space_lg">16dp</dimen>
+    <dimen name="ds_space_xl">20dp</dimen>
+    <dimen name="ds_space_xxl">24dp</dimen>
+    <dimen name="ds_space_3xl">28dp</dimen>
+
+    <dimen name="ds_radius_sm">14dp</dimen>
+    <dimen name="ds_radius_md">16dp</dimen>
+    <dimen name="ds_radius_lg">20dp</dimen>
+    <dimen name="ds_radius_ticket">18dp</dimen>
+    <dimen name="ds_radius_pill">28dp</dimen>
+    <dimen name="ds_radius_nav">20dp</dimen>
+
+    <dimen name="ds_stroke_hairline">1dp</dimen>
+
+    <dimen name="ds_elevation_card">4dp</dimen>
+    <dimen name="ds_elevation_card_low">3dp</dimen>
+    <dimen name="ds_elevation_nav">10dp</dimen>
+    <dimen name="ds_elevation_profile_card">3dp</dimen>
+
+    <dimen name="ds_button_min_height">56dp</dimen>
+    <dimen name="ds_button_min_height_compact">52dp</dimen>
+
+    <dimen name="ds_screen_horizontal_padding">@dimen/ds_space_lg</dimen>
+    <dimen name="ds_card_inner_padding">@dimen/ds_space_xl</dimen>
+    <dimen name="ds_list_padding">@dimen/ds_space_md</dimen>
+
+    <dimen name="ds_avatar_profile">108dp</dimen>
+    <dimen name="ds_touch_target">48dp</dimen>
+</resources>

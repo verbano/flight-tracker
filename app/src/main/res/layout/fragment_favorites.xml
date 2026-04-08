@@ -1,12 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@drawable/bg_screen_gradient"
+    android:padding="@dimen/ds_screen_horizontal_padding">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Экран избранного"
-        android:textSize="20sp" />
-
+        android:layout_gravity="center"
+        android:text="@string/favorites_page_header"
+        android:textAppearance="@style/TextAppearance.FlightTracker.Title" />
 </FrameLayout>

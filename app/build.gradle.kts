@@ -67,6 +67,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":designsystem"))
 
     implementation("com.github.jetradarmobile:android-snowfall:1.2.1")
 }

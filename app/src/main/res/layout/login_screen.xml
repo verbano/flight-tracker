@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_screen_gradient"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,17 +15,32 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:padding="24dp"
+            android:padding="@dimen/ds_space_xxl"
             android:paddingTop="80dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login_screen_title"
+                android:textAppearance="@style/TextAppearance.FlightTracker.Display" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_sm"
+                android:layout_marginBottom="@dimen/ds_space_xxl"
+                android:text="@string/login_screen_subtitle"
+                android:textAppearance="@style/TextAppearance.FlightTracker.Caption" />
 
             <EditText
                 android:id="@+id/loginEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/ds_space_lg"
                 android:hint="@string/login"
                 android:inputType="text"
+                android:minHeight="@dimen/ds_button_min_height_compact"
+                android:textAppearance="@style/TextAppearance.FlightTracker.Body"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary" />
 
@@ -32,20 +48,20 @@
                 android:id="@+id/passwordEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="@dimen/ds_space_xxl"
                 android:hint="@string/password"
                 android:inputType="textPassword"
+                android:minHeight="@dimen/ds_button_min_height_compact"
+                android:textAppearance="@style/TextAppearance.FlightTracker.Body"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary" />
 
             <Button
                 android:id="@+id/loginBtn"
+                style="@style/Widget.FlightTracker.Button.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_button_blue_round"
-                android:text="@string/login_button"
-                android:textAllCaps="false"
-                android:textColor="?attr/colorOnPrimary" />
+                android:text="@string/login_button" />
         </LinearLayout>
     </FrameLayout>
 </ScrollView>

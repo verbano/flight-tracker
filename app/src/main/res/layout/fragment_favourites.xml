@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:padding="12dp" />
+        android:padding="@dimen/ds_list_padding" />
 
     <TextView
         android:id="@+id/tvFavoritesEmpty"
@@ -17,9 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:padding="@dimen/ds_space_lg"
         android:text="@string/favorites_empty"
-        android:textColor="@color/text_primary"
-        android:textSize="16sp"
+        android:textAppearance="@style/TextAppearance.FlightTracker.EmptyState"
         android:visibility="gone" />
-
 </FrameLayout>

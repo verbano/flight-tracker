@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.bapinaev.flighttracker.R
+import com.bapinaev.flighttracker.designsystem.R as DsR
 
 class RouteTimelineView @JvmOverloads constructor(
     context: Context,
@@ -16,12 +16,12 @@ class RouteTimelineView @JvmOverloads constructor(
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = dp(3f)
-        color = ContextCompat.getColor(context, R.color.stroke_soft)
+        color = ContextCompat.getColor(context, DsR.color.stroke_soft)
     }
 
     private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = ContextCompat.getColor(context, R.color.brand_blue)
+        color = ContextCompat.getColor(context, DsR.color.brand_blue)
     }
 
     private var transfers: Int = 0

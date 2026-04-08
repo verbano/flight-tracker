@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bapinaev.flighttracker.R
+import com.bapinaev.flighttracker.designsystem.R as DsR
 import com.bapinaev.flighttracker.databinding.FragmentSearchBinding
 import com.bapinaev.flighttracker.di.AppGraph
 import com.bapinaev.domain.model.FlightQuery
@@ -126,10 +127,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             val chip = Chip(requireContext()).apply {
                 isClickable = true
                 isCheckable = false
-                chipBackgroundColor = ContextCompat.getColorStateList(context, R.color.chip_bg)
-                setTextColor(ContextCompat.getColor(context, R.color.chip_text))
+                chipBackgroundColor = ContextCompat.getColorStateList(context, DsR.color.chip_bg)
+                setTextColor(ContextCompat.getColor(context, DsR.color.chip_text))
                 chipStrokeWidth = resources.displayMetrics.density
-                chipStrokeColor = ContextCompat.getColorStateList(context, R.color.stroke_soft)
+                chipStrokeColor = ContextCompat.getColorStateList(context, DsR.color.stroke_soft)
                 text = getString(
                     R.string.search_history_item_template,
                     item.route.origin,

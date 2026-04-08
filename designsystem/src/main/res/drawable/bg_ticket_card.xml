@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?attr/colorControlHighlight">
+    android:color="@color/ds_ripple_brand">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent" />
-            <corners android:radius="14dp" />
+            <solid android:color="@color/surface_light" />
+            <corners android:radius="@dimen/ds_radius_ticket" />
             <stroke
-                android:width="1.5dp"
+                android:width="@dimen/ds_stroke_hairline"
                 android:color="@color/stroke_soft" />
         </shape>
     </item>

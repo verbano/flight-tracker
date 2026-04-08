@@ -2,56 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="@dimen/ds_space_md"
     android:background="@drawable/bg_ticket_card"
     android:clipToPadding="false"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/ds_space_lg">
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_primary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingBottom="4dp"/>
+        android:paddingBottom="@dimen/ds_space_xs"
+        android:textAppearance="@style/TextAppearance.FlightTracker.Headline" />
 
     <TextView
         android:id="@+id/tvAirline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/text_secondary"
-        android:paddingBottom="2dp"/>
+        android:paddingBottom="@dimen/ds_space_xs"
+        android:textAppearance="@style/TextAppearance.FlightTracker.Caption" />
 
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/text_secondary"
-        android:paddingBottom="2dp"/>
+        android:paddingBottom="@dimen/ds_space_xs"
+        android:textAppearance="@style/TextAppearance.FlightTracker.Caption" />
 
     <TextView
         android:id="@+id/tvDuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/chip_text"
-        android:textStyle="bold"
-        android:paddingBottom="4dp"/>
+        android:paddingBottom="@dimen/ds_space_xs"
+        android:textAppearance="@style/TextAppearance.FlightTracker.Emphasis" />
 
     <LinearLayout
         android:id="@+id/layoutDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:paddingTop="10dp"
-        android:divider="?android:dividerVertical"
-        android:showDividers="none">
-
-    </LinearLayout>
-
+        android:paddingTop="@dimen/ds_space_md"
+        android:visibility="gone" />
 </LinearLayout>
