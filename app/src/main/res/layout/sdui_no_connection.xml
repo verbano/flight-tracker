@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_gradient"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="400dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clipToPadding="false"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/ds_space_xxl"
+            android:paddingEnd="@dimen/ds_space_xxl">
+
+            <TextView
+                android:id="@+id/sdui_no_connection_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="@string/sdui_no_connection_plane"
+                android:textSize="64sp" />
+
+            <TextView
+                android:id="@+id/sdui_no_connection_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/ds_space_lg"
+                android:gravity="center"
+                android:text="@string/sdui_no_connection_title"
+                android:textAppearance="@style/TextAppearance.FlightTracker.Headline" />
+
+            <TextView
+                android:id="@+id/sdui_no_connection_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/ds_space_sm"
+                android:gravity="center"
+                android:text="@string/sdui_no_connection_subtitle"
+                android:textAppearance="@style/TextAppearance.FlightTracker.BodySecondary" />
+
+            <Button
+                android:id="@+id/btn_sdui_retry"
+                style="@style/Widget.FlightTracker.Button.PrimaryCompact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_xxl"
+                android:text="@string/sdui_retry" />
+
+            <Button
+                android:id="@+id/btn_sdui_skip"
+                style="@style/Widget.FlightTracker.Button.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_md"
+                android:text="@string/sdui_skip" />
+        </LinearLayout>
+    </FrameLayout>
+</ScrollView>

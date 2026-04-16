@@ -17,30 +17,32 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import com.bapinaev.flighttracker.designsystem.R as DsR
 
-class SduiFactory(private val context: Context) {
+class SduiFactory(
+    private val context: Context,
+    private val onAction: (SduiAction) -> Unit = {}
+) {
 
     private val density = context.resources.displayMetrics.density
 
     private fun dp(value: Int): Int = (value * density + 0.5f).toInt()
 
     fun buildView(node: SduiNode): View {
-        val view = when (node.type) {
-            "scroll" -> buildScroll(node)
-            "frame" -> buildFrame(node)
-            "column" -> buildColumn(node)
-            "card" -> buildCard(node)
-            "text" -> buildText(node)
-            "button" -> buildButton(node)
-            "image" -> buildImage(node)
-            "divider" -> buildDivider(node)
-            "back_button" -> buildBackButton(node)
-            else -> View(context)
+        val view = when (node) {
+            is SduiScrollNode -> buildScroll(node)
+            is SduiFrameNode -> buildFrame(node)
+            is SduiColumnNode -> buildColumn(node)
+            is SduiCardNode -> buildCard(node)
+            is SduiTextNode -> buildText(node)
+            is SduiButtonNode -> buildButton(node)
+            is SduiImageNode -> buildImage(node)
+            is SduiDividerNode -> buildDivider()
+            is SduiBackButtonNode -> buildBackButton(node)
         }
-        node.id?.let { view.tag = it }
+        node.layout.id?.let { view.tag = it }
         return view
     }
 
-    private fun buildScroll(node: SduiNode): ScrollView {
+    private fun buildScroll(node: SduiScrollNode): ScrollView {
         val sv = ScrollView(context)
         sv.isFillViewport = true
         sv.fitsSystemWindows = true
@@ -59,54 +61,58 @@ class SduiFactory(private val context: Context) {
         return sv
     }
 
-    private fun buildFrame(node: SduiNode): FrameLayout {
+    private fun buildFrame(node: SduiFrameNode): FrameLayout {
         val frame = FrameLayout(context)
-        node.minHeight?.let { frame.minimumHeight = dp(it) }
-        node.children?.forEach { child ->
+        node.layout.minHeight?.let { frame.minimumHeight = dp(it) }
+        node.children.forEach { child ->
             val childView = buildView(child)
-            val w = child.size?.let { dp(it) } ?: FrameLayout.LayoutParams.MATCH_PARENT
-            val h = child.size?.let { dp(it) } ?: FrameLayout.LayoutParams.WRAP_CONTENT
+            val w = child.layout.size?.let { dp(it) } ?: FrameLayout.LayoutParams.MATCH_PARENT
+            val h = child.layout.size?.let { dp(it) } ?: FrameLayout.LayoutParams.WRAP_CONTENT
             val lp = FrameLayout.LayoutParams(w, h)
-            lp.gravity = parseGravity(child.layoutGravity)
-            applyMargins(lp, child)
+            lp.gravity = parseGravity(child.layout.layoutGravity)
+            applyMargins(lp, child.layout)
             frame.addView(childView, lp)
         }
         return frame
     }
 
-    private fun buildColumn(node: SduiNode): LinearLayout {
+    private fun buildColumn(node: SduiColumnNode): LinearLayout {
         val ll = LinearLayout(context)
         ll.orientation = LinearLayout.VERTICAL
         ll.clipToPadding = false
-        applyPadding(ll, node)
-        addLinearChildren(ll, node)
+        applyPadding(ll, node.layout)
+        addLinearChildren(ll, node.children)
         return ll
     }
 
-    private fun buildCard(node: SduiNode): LinearLayout {
+    private fun buildCard(node: SduiCardNode): LinearLayout {
         val ll = LinearLayout(context)
         ll.orientation = LinearLayout.VERTICAL
         ll.setBackgroundResource(DsR.drawable.bg_profile_card)
         ll.elevation = context.resources.getDimension(DsR.dimen.ds_elevation_profile_card)
         val padH = context.resources.getDimensionPixelSize(DsR.dimen.ds_space_xxl)
         ll.setPadding(padH, dp(26), padH, padH)
-        addLinearChildren(ll, node)
+        addLinearChildren(ll, node.children)
         return ll
     }
 
-    private fun addLinearChildren(parent: LinearLayout, node: SduiNode) {
-        node.children?.forEach { child ->
+    private fun addLinearChildren(parent: LinearLayout, children: List<SduiNode>) {
+        children.forEach { child ->
             parent.addView(buildView(child), createLinearChildParams(child))
         }
     }
 
     private fun createLinearChildParams(child: SduiNode): LinearLayout.LayoutParams {
+        val childSize = child.layout.size
         val lp = when {
-            child.type == "divider" -> LinearLayout.LayoutParams(
+            child is SduiDividerNode -> LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(1)
             )
-            child.size != null -> LinearLayout.LayoutParams(dp(child.size), dp(child.size))
-            child.layoutGravity?.contains("center_horizontal") == true -> LinearLayout.LayoutParams(
+            childSize != null -> LinearLayout.LayoutParams(
+                dp(childSize),
+                dp(childSize)
+            )
+            child.layout.layoutGravity?.contains("center_horizontal") == true -> LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
@@ -115,21 +121,21 @@ class SduiFactory(private val context: Context) {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
-        lp.gravity = parseGravity(child.layoutGravity)
-        applyMargins(lp, child)
+        lp.gravity = parseGravity(child.layout.layoutGravity)
+        applyMargins(lp, child.layout)
         return lp
     }
 
-    private fun buildText(node: SduiNode): TextView {
+    private fun buildText(node: SduiTextNode): TextView {
         val tv = TextView(context)
         node.text?.let { tv.text = it }
         resolveTextStyle(node.style)?.let { TextViewCompat.setTextAppearance(tv, it) }
-        if (node.textAlign == "center") tv.gravity = Gravity.CENTER
+        if (node.layout.textAlign == "center") tv.gravity = Gravity.CENTER
         if (node.style == "headline") tv.setLineSpacing(dp(2).toFloat(), 1f)
         return tv
     }
 
-    private fun buildButton(node: SduiNode): Button {
+    private fun buildButton(node: SduiButtonNode): Button {
         val btn = Button(context)
         node.text?.let { btn.text = it }
         btn.isAllCaps = false
@@ -158,11 +164,13 @@ class SduiFactory(private val context: Context) {
             DsR.dimen.ds_button_min_height_compact
         }
         btn.minimumHeight = context.resources.getDimensionPixelSize(heightRes)
+        val action = node.action ?: inferActionFromButtonId(node.layout.id)
+        action?.let { a -> btn.setOnClickListener { onAction(a) } }
 
         return btn
     }
 
-    private fun buildImage(node: SduiNode): ImageView {
+    private fun buildImage(node: SduiImageNode): ImageView {
         val iv = ImageView(context)
         if (node.src == "avatar_placeholder") {
             iv.setBackgroundResource(DsR.drawable.bg_profile_avatar_ring)
@@ -174,13 +182,13 @@ class SduiFactory(private val context: Context) {
         return iv
     }
 
-    private fun buildDivider(node: SduiNode): View {
+    private fun buildDivider(): View {
         val v = View(context)
         v.setBackgroundColor(ContextCompat.getColor(context, DsR.color.stroke_soft))
         return v
     }
 
-    private fun buildBackButton(node: SduiNode): ImageButton {
+    private fun buildBackButton(node: SduiBackButtonNode): ImageButton {
         val btn = ImageButton(context)
         val outValue = TypedValue()
         context.theme.resolveAttribute(
@@ -190,8 +198,20 @@ class SduiFactory(private val context: Context) {
         val pad = context.resources.getDimensionPixelSize(DsR.dimen.ds_space_md)
         btn.setPadding(pad, pad, pad, pad)
         btn.setImageResource(DsR.drawable.ic_back_profile)
+        val action = node.action ?: inferActionFromBackButtonId(node.layout.id)
+        action?.let { a -> btn.setOnClickListener { onAction(a) } }
         return btn
     }
+
+    private fun inferActionFromButtonId(id: String?): SduiAction? = when (id) {
+        "editBtn" -> SduiAction.Navigate("edit_profile")
+        "logoutBtn" -> SduiAction.Navigate("logout")
+        "deleteBtn" -> SduiAction.Navigate("delete_account")
+        else -> null
+    }
+
+    private fun inferActionFromBackButtonId(id: String?): SduiAction? =
+        if (id == null || id == "backBtn") SduiAction.Navigate("back") else null
 
     private fun resolveTextStyle(style: String?): Int? = when (style) {
         "display" -> DsR.style.TextAppearance_FlightTracker_Display
@@ -226,16 +246,16 @@ class SduiFactory(private val context: Context) {
         return result
     }
 
-    private fun applyPadding(view: View, node: SduiNode) {
-        val ph = node.paddingHorizontal?.let { dp(it) } ?: 0
-        val pt = node.paddingTop?.let { dp(it) } ?: 0
-        val pb = node.paddingBottom?.let { dp(it) } ?: 0
+    private fun applyPadding(view: View, layout: SduiLayout) {
+        val ph = layout.paddingHorizontal?.let { dp(it) } ?: 0
+        val pt = layout.paddingTop?.let { dp(it) } ?: 0
+        val pb = layout.paddingBottom?.let { dp(it) } ?: 0
         view.setPadding(ph, pt, ph, pb)
     }
 
-    private fun applyMargins(lp: ViewGroup.MarginLayoutParams, node: SduiNode) {
-        node.marginTop?.let { lp.topMargin = dp(it) }
-        node.marginBottom?.let { lp.bottomMargin = dp(it) }
-        node.marginStart?.let { lp.marginStart = dp(it) }
+    private fun applyMargins(lp: ViewGroup.MarginLayoutParams, layout: SduiLayout) {
+        layout.marginTop?.let { lp.topMargin = dp(it) }
+        layout.marginBottom?.let { lp.bottomMargin = dp(it) }
+        layout.marginStart?.let { lp.marginStart = dp(it) }
     }
 }
