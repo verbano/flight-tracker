@@ -15,9 +15,9 @@ class UserValidator {
             user.surname.isBlank() ->
                 throw InvalidUserInfoException("User surname must not be blank")
 
-            user.password.isBlank() || user.password.length < 5 ->
+            user.password.isBlank() || user.password.length < 4 ->
                 throw InvalidUserInfoException(
-                    "User password must not be blank and be more than 4 characters"
+                    "User password must not be blank and be at least 4 characters"
                 )
         }
     }

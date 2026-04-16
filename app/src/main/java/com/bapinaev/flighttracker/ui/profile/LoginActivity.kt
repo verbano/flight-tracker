@@ -11,14 +11,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bapinaev.flighttracker.R
+import com.bapinaev.flighttracker.di.AppGraph
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels {
+        LoginViewModelFactory(
+            loginUserUseCase = AppGraph.loginUserUseCase
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppGraph.ensureInitialized(applicationContext)
         setContentView(R.layout.login_screen)
 
         val loginEdit = findViewById<EditText>(R.id.loginEdit)
@@ -39,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
                         LoginEvent.EmptyFields -> {
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Заполните все поля",
+                                getString(R.string.login_empty_fields),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -47,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                         LoginEvent.InvalidCredentials -> {
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Неверный логин или пароль",
+                                getString(R.string.login_invalid_credentials),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

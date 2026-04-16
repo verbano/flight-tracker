@@ -9,8 +9,15 @@ import com.bapinaev.domain.usecase.AddQuoteToFavouritesUseCase
 import com.bapinaev.domain.usecase.GetCheapestPriceUseCase
 import com.bapinaev.domain.usecase.GetFavouriteQuotesUseCase
 import com.bapinaev.domain.usecase.GetQueryHistoryUseCase
+import com.bapinaev.domain.usecase.GetUserUseCase
+import com.bapinaev.domain.usecase.LoginUserUseCase
+import com.bapinaev.domain.usecase.LogoutUserUseCase
+import com.bapinaev.domain.usecase.RemoveUserUseCase
 import com.bapinaev.domain.usecase.RemoveQuoteFromFavouritesUseCase
+import com.bapinaev.domain.usecase.SaveUserUseCase
 import com.bapinaev.domain.service.FlightQueryValidator
+import com.bapinaev.domain.service.SessionManager
+import com.bapinaev.domain.service.UserValidator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -37,6 +44,24 @@ object AppGraph {
     lateinit var removeQuoteFromFavouritesUseCase: RemoveQuoteFromFavouritesUseCase
         private set
 
+    lateinit var loginUserUseCase: LoginUserUseCase
+        private set
+
+    lateinit var logoutUserUseCase: LogoutUserUseCase
+        private set
+
+    lateinit var getUserUseCase: GetUserUseCase
+        private set
+
+    lateinit var saveUserUseCase: SaveUserUseCase
+        private set
+
+    lateinit var removeUserUseCase: RemoveUserUseCase
+        private set
+
+    lateinit var sessionManager: SessionManager
+        private set
+
     fun ensureInitialized(context: Context) {
         if (initialized) return
         synchronized(this) {
@@ -45,6 +70,7 @@ object AppGraph {
             val dependencies = DataModule.create(context)
             val api = ApiFactory.createAviasalesApi(API_BASE_URL)
             val cheapestPriceProvider = RetrofitCheapestPriceRepository(api, API_TOKEN)
+            sessionManager = dependencies.sessionManager
             val defaultUser = User(
                 firstName = "Джон",
                 surname = "Самолет",
@@ -61,33 +87,56 @@ object AppGraph {
                     }
                 }
             }
-            dependencies.sessionManager.setCurrentUser(defaultUser)
+            sessionManager.setCurrentUser(defaultUser)
 
             getCheapestPriceUseCase = GetCheapestPriceUseCase(
                 provider = cheapestPriceProvider,
                 queryHistoryRepository = dependencies.queryHistoryRepository,
                 validator = FlightQueryValidator(),
-                sessionManager = dependencies.sessionManager
+                sessionManager = sessionManager
             )
 
             getQueryHistoryUseCase = GetQueryHistoryUseCase(
                 historyRepository = dependencies.queryHistoryRepository,
-                sessionManager = dependencies.sessionManager
+                sessionManager = sessionManager
             )
 
             addQuoteToFavouritesUseCase = AddQuoteToFavouritesUseCase(
                 favouritesRepository = dependencies.favouriteQuotesRepository,
-                sessionManager = dependencies.sessionManager
+                sessionManager = sessionManager
             )
 
             getFavouriteQuotesUseCase = GetFavouriteQuotesUseCase(
                 favouritesRepository = dependencies.favouriteQuotesRepository,
-                sessionManager = dependencies.sessionManager
+                sessionManager = sessionManager
             )
 
             removeQuoteFromFavouritesUseCase = RemoveQuoteFromFavouritesUseCase(
                 favouritesRepository = dependencies.favouriteQuotesRepository,
-                sessionManager = dependencies.sessionManager
+                sessionManager = sessionManager
+            )
+
+            loginUserUseCase = LoginUserUseCase(
+                userRepository = dependencies.userRepository,
+                sessionManager = sessionManager
+            )
+
+            logoutUserUseCase = LogoutUserUseCase(
+                sessionManager = sessionManager
+            )
+
+            getUserUseCase = GetUserUseCase(
+                userRepository = dependencies.userRepository
+            )
+
+            saveUserUseCase = SaveUserUseCase(
+                userRepository = dependencies.userRepository,
+                validator = UserValidator()
+            )
+
+            removeUserUseCase = RemoveUserUseCase(
+                userRepository = dependencies.userRepository,
+                sessionManager = sessionManager
             )
 
             initialized = true
